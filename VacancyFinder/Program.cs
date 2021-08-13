@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Opera;
@@ -9,75 +9,87 @@ namespace VacancyFinder
 {
     class Program
     {
+        private static readonly string _dropDownDepartmentName = "Разработка продуктов";
+        private static readonly string _dropDownLanguageName   = "Английский";
+        private static readonly string _pathToWebDriverFolder  = "WebDriver";
+        private static readonly string _veeamUrl               = "https://careers.veeam.ru/vacancies";
+
         static void Main(string[] args)
         {
-            var pathToWebDriverFolder = "WebDriver";
-            
-            using(IWebDriver driver = new OperaDriver(pathToWebDriverFolder) )
+            using(IWebDriver driver = new OperaDriver(_pathToWebDriverFolder) )
             {
-                
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-                driver.Navigate().GoToUrl("https://careers.veeam.ru/vacancies");
-                //Sleep();
+                GoToUrl(driver, _veeamUrl);                
+                ExpandBrowser(driver);
 
-                driver.Manage().Window.Maximize();
-                //Sleep();
+                WaitForUserComfortWatch(8);
 
                 IWebElement deptButtonElem = driver.FindElement(By.XPath("html/body/div[1]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/button"));
                 deptButtonElem.Click();
 
-                IWebElement deptAhRef = driver.FindElement(By.XPath(@"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div/a[4]"));
-                deptAhRef.Click();
+                //IWebElement deptAhRef = driver.FindElement(By.XPath(@"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div/a[4]"));
+                //deptAhRef.Click();
 
                 IWebElement languageButtonElem = driver.FindElement(By.XPath("/html/body/div[1]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/button"));
                 languageButtonElem.Click();
-
-                //IWebElement languageDropDown = driver.FindElement(By.XPath(@"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div"));
-                //var DropDown = new SelectElement(languageDropDown);
                 
-                var languageDropDown = driver.FindElements(By.XPath(@"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div/div"));
+                var languageDropDown = driver.FindElements(By.XPath(@"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div/div"));                
+                ClickOnElementInDropDownList(languageDropDown, _dropDownLanguageName);
 
-                foreach (var item in collection)
-                {
+                //CountOfVacancies();
 
-                }
-
-                
-                //DropDown.SelectByText("Разработка продуктов");
-
-                //SelectElement selectLanguage = new SelectElement(languageDropDown);
-                //selectLanguage.SelectByText("Английский");
-
-                //var element = driver.FindElement(By.XPath(@"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div"));
-                //Actions action = new Actions(driver);
-                //action.MoveToElement(element);
-                //var DropDown = new SelectElement(element);
-                //DropDown.SelectByText("Разработка продуктов");
-                //*[@id="sl"]
-                //element.Click();
-                //*[@id="root"]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div
-
-                //English
-                //*[@id="root"]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div/div[2]/label
-                Console.WriteLine();
-                //Actions action = new Actions(driver);
-                //action.MoveToElement(element);
-                //var DropDown = new SelectElement(element);
-                //DropDown.SelectByText("Разработка продуктов");
-
-                // wait.Until(/*webDriver => webDriver.FindElement(By.CssSelector("h3")).Displayed*/);
-                //IWebElement firstResult = driver.FindElement(By.CssSelector("h3"));
-                //Console.WriteLine(firstResult.GetAttribute("textContent"));
             }
             
             Console.ReadKey();
         }
 
-        private static void Sleep()
+        /// <summary>
+        /// Метод перехода по веб-ссылке
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="url"></param>
+        private static void GoToUrl(IWebDriver driver, string url) => driver.Navigate().GoToUrl(url);
+
+        /// <summary>
+        /// Метод разворачивает браузер на весь экран
+        /// </summary>
+        /// <param name="driver"></param>
+        private static void ExpandBrowser(IWebDriver driver) => driver.Manage().Window.Maximize();
+
+        /// <summary>
+        /// Вспомогательный метод для информативного ожидания между действиями в браузере
+        /// </summary>
+        /// <param name="seconds">Секунды ожидания</param>
+        private static void WaitForUserComfortWatch(int seconds)
         {
-            Thread.Sleep(5000);
+            Thread.Sleep(seconds * 1000);
         }
+
+        /// <summary>
+        /// Метод нажатия на элемент выпадающего списка
+        /// </summary>
+        /// <param name="dropDownList">Выпадающий список</param>
+        /// <param name="expectedString">Наименование элемента, который необходимо выбрать</param>
+        private static void ClickOnElementInDropDownList(ReadOnlyCollection<IWebElement> dropDownList, string expectedString)
+        {
+            var comparer = StringComparer.OrdinalIgnoreCase;
+
+            foreach (var item in dropDownList)
+            {
+                if (comparer.Compare(item.Text, expectedString) == 0)  // 0 - Both strings are equal in value
+                {
+                    item.Click();
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Метод подсчета вакансий на веб-сайте Veeam
+        /// </summary>
+        private static void CountOfVacancies()
+        { }
 
     }
 }
