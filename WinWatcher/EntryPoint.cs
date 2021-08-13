@@ -4,7 +4,7 @@ using WinWatcher.Services;
 
 namespace WinWatcher
 {
-    class Program
+    class EntryPoint
     {
         static void Main(string[] args)
         {
