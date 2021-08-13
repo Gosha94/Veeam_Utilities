@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WinWatcher": {
+      "commandName": "Project",
+      "commandLineArgs": "notepad.exe 1 1"
+    }
+  }
+}
