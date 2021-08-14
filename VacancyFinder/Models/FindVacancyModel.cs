@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace VacancyFinder.Models
 {
@@ -28,6 +29,7 @@ namespace VacancyFinder.Models
             private set 
             {
                 ClearInputString(ref value);
+                _departmentName = value;
             }
         }
 
@@ -40,6 +42,7 @@ namespace VacancyFinder.Models
             private set
             {
                 ClearInputString(ref value);
+                _languageName = value;
             }
         }
 
@@ -51,7 +54,14 @@ namespace VacancyFinder.Models
             get => _vacancyNumber;
             private set
             {
-                
+                if ( value < 0 )
+                {
+                    PushArgumentException("Кол-во вакансий не должно быть отрицательным!");
+                }
+                else
+                {
+                    _vacancyNumber = value;
+                }
             }
         }
 
@@ -80,15 +90,14 @@ namespace VacancyFinder.Models
         /// </summary>
         private void SetPublicProperties()
         {
-            int lifeTime, frequency;
+            int vacancyNum;
 
-            this.ProcessName = _cmdArguments.First();
+            this.DepartmentName = _cmdArguments.First();
 
-            CheckAbleConvertToInt(_cmdArguments[1], out lifeTime);
-            this.ProcessLifeTime = lifeTime;
+            this.LanguageName = _cmdArguments[1];
 
-            CheckAbleConvertToInt(_cmdArguments[2], out frequency);
-            this.CheckFrequency = frequency;
+            CheckAbleConvertToInt(_cmdArguments[2], out vacancyNum);
+            this.VacancyNumber = vacancyNum;
         }
 
         /// <summary>
@@ -116,8 +125,10 @@ namespace VacancyFinder.Models
         {
             if (inputArr.Length != 3)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 PushArgumentException("Количество аргументов не соответствует заданию!" +
-                    "Необходимо указать: Имя процеса(string), Время жизни(int), Частоту проверки(int)");
+                    "Необходимо разделять аргументы кавычками \"\": Название отдела(string), Язык(string), Ожидаемое кол-во вакансий(int)");
             }
         }
 
