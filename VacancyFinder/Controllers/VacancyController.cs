@@ -1,9 +1,9 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Opera;
-using VacancyFinder.Configuration;
 using VacancyFinder.Models;
 using VacancyFinder.Service;
+using VacancyFinder.Configuration;
 
 namespace VacancyFinder.Controllers
 {
@@ -29,6 +29,8 @@ namespace VacancyFinder.Controllers
 
         #endregion
 
+        #region Constructor
+
         /// <summary>
         /// Конструктор контроллера
         /// </summary>
@@ -36,9 +38,11 @@ namespace VacancyFinder.Controllers
         public VacancyController(string[] cmdArgs)
         {
             _vacancyModel = new FindVacancyModel(cmdArgs);
-            _clicker      = new ClickerService();
+            _clicker = new ClickerService();
             _searchEngine = new BrowserSearchService();
         }
+
+        #endregion
 
         #region Public API
 
