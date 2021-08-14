@@ -1,8 +1,8 @@
 ﻿using System;
-using WinWatcher.Models;
-using WinWatcher.Interfaces;
 using System.Threading;
+using WinWatcher.Models;
 using System.Diagnostics;
+using WinWatcher.Interfaces;
 using System.Collections.Generic;
 
 namespace WinWatcher.Services
@@ -36,6 +36,8 @@ namespace WinWatcher.Services
         
         public void StartWatchProcess()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+
             _logger.WriteToLog($"Служба мониторинга: Имя процесса: {_processInfo.ProcessName}");
             _logger.WriteToLog($"Служба мониторинга: Частота проверки мсек: {_checkIntervalModel.CheckFrequencyInMsec}");
             _logger.WriteToLog($"Служба мониторинга: Время жизни процесса мсек: {_checkIntervalModel.ProcessLifeTimeInMsec}");
@@ -99,6 +101,8 @@ namespace WinWatcher.Services
         /// <param name="process"></param>
         private void KillProcess(Process process)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+
             _logger.WriteToLog($"Процесс {process.ProcessName}: {process.Id} завершается!");
             process.Kill();
         }

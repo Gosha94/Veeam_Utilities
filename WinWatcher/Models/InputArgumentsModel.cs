@@ -12,9 +12,9 @@ namespace WinWatcher.Models
 
         #region Private Model Fields
 
-        private string _processName;
-        private int    _processLifeTime;
-        private int    _checkFrequency;
+        private string   _processName;
+        private int      _processLifeTime;
+        private int      _checkFrequency;
         private string[] _cmdArguments;
 
         #endregion
