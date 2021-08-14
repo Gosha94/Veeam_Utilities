@@ -1,8 +1,7 @@
 {
   "profiles": {
     "VacancyFinder": {
-      "commandName": "Project",
-      "commandLineArgs": "\"Разработка продуктов\" \"Английский\" 6"
+      "commandName": "Project"
     },
     "WSL 2": {
       "commandName": "WSL2",

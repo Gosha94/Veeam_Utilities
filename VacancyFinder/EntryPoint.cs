@@ -17,6 +17,8 @@ namespace VacancyFinder
                 Console.WriteLine(ex.Message);
             }
 
+            Console.ReadKey();
+
         }
     }
 }
