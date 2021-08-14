@@ -2,7 +2,7 @@
   "profiles": {
     "VacancyFinder": {
       "commandName": "Project",
-      "commandLineArgs": "\"Разработка приложений\" \"кек\" \"Английский\" 8"
+      "commandLineArgs": "\"Разработка продуктов\" \"Английский\" 6"
     },
     "WSL 2": {
       "commandName": "WSL2",
