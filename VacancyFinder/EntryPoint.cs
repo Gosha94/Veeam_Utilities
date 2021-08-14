@@ -3,31 +3,29 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Opera;
+using VacancyFinder.Controllers;
 
 namespace VacancyFinder
 {
     class EntryPoint
     {
+        // Аргументы приложения
         private static readonly string _dropDownDepartmentName = "Разработка продуктов";
-        private static readonly string _dropDownLanguageName   = "Английский";
-        private static readonly string _pathToWebDriverFolder  = "WebDriver";
-        private static readonly string _veeamUrl               = "https://careers.veeam.ru/vacancies";
+        private static readonly string _dropDownLanguageName   = "Английский";        
         private static readonly int    _expectedVacancyNumber  = 6;
 
         static void Main(string[] args)
         {
+            var findVacancyModel = new 
+            var vacController = new VacancyController(inputModel);
+            vacController
+
 
             using(IWebDriver driver = new OperaDriver(_pathToWebDriverFolder) )
             {
                 //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-                const string departmentButtonFullXPath  = "/html/body/div[1]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/button";
-                const string departmentDropDownXPath    = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div/a";
-
-                const string languageButtonFullXPath    = "/html/body/div[1]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/button";                
-                const string languageDropDownXPath      = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div/div";
                 
-                const string vacancyListXPath           = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[2]/div/a";
 
                 GoToUrl(driver, _veeamUrl);                
                 ExpandBrowser(driver);
