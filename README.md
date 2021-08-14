@@ -16,5 +16,5 @@
 Пример использования:
   1) Открываем cmd.exe
   2) D:
-  3) cd D:\Projects\_NET\Veeam_Utilities\VacancyFinder\bin\Debug\netcoreapp3.1
+  3) cd D:\Projects\_NET\Veeam_Utilities\VacancyFinder\bin\Debug\netcoreapp3.1\
   4) VacancyFinder.exe "Разработка продуктов" "Английский" 6
