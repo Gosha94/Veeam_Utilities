@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 using System.Threading;
 using VacancyFinder.Interfaces;
 
@@ -25,10 +26,9 @@ namespace VacancyFinder.Service
         /// <summary>
         /// Вспомогательный метод для информативного ожидания между действиями в браузере
         /// </summary>
-        /// <param name="seconds">Секунды ожидания</param>
-        public void WaitForPageLoad(int seconds)
-        {
-            Thread.Sleep(seconds * 1000);
-        }
+        /// <param name="driver">экземпляр конкретного веб-драйвера</param>
+        /// <param name="seconds">время ожидания драйвера в секундах</param>
+        public void WaitForPageLoad(IWebDriver driver, int seconds) => driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(seconds);
+
     }
 }
