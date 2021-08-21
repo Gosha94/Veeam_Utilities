@@ -75,7 +75,7 @@ namespace VacancyFinder.Controllers
         {
             _searchEngine.GoToUrl(driver, _veeamUrl);
             _searchEngine.ExpandBrowser(driver);
-            _searchEngine.WaitForPageLoad(2);
+            _searchEngine.WaitForPageLoad(driver, 2);
         }
 
         /// <summary>
@@ -87,12 +87,12 @@ namespace VacancyFinder.Controllers
             var deptButtonElem = driver.FindElement(By.XPath(_departmentButtonFullXPath));
             _clicker.ClickOnSingleElement(deptButtonElem);
 
-            _searchEngine.WaitForPageLoad(2);
+            _searchEngine.WaitForPageLoad(driver, 2);
 
             var deptDropDown = driver.FindElements(By.XPath(_departmentDropDownXPath));
             _clicker.ClickOnElementInDropDownList(deptDropDown, _vacancyModel.DepartmentName);
 
-            _searchEngine.WaitForPageLoad(2);
+            _searchEngine.WaitForPageLoad(driver, 2);
         }
 
         /// <summary>
@@ -103,12 +103,12 @@ namespace VacancyFinder.Controllers
             var languageButtonElem = driver.FindElement(By.XPath(_languageButtonFullXPath));
             _clicker.ClickOnSingleElement(languageButtonElem);
 
-            _searchEngine.WaitForPageLoad(2);
+            _searchEngine.WaitForPageLoad(driver, 2);
 
             var languageDropDown = driver.FindElements(By.XPath(_languageDropDownXPath));
             _clicker.ClickOnElementInDropDownList(languageDropDown, _vacancyModel.LanguageName);
 
-            _searchEngine.WaitForPageLoad(2);
+            _searchEngine.WaitForPageLoad(driver, 2);
 
             _clicker.ClickOnSingleElement(languageButtonElem);
         }
@@ -118,7 +118,7 @@ namespace VacancyFinder.Controllers
         /// </summary>
         private void CountOfVacanciesOnSite(IWebDriver driver)
         {
-            _searchEngine.WaitForPageLoad(2);
+            _searchEngine.WaitForPageLoad(driver, 2);
 
             var vacanciesList = driver.FindElements(By.XPath(_vacancyListXPath));
 

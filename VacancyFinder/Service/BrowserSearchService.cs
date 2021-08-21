@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Threading;
-using VacancyFinder.Interfaces;
+using VacancyFinder.Contracts;
 
 namespace VacancyFinder.Service
 {

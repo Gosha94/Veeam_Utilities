@@ -1,6 +1,6 @@
 ﻿using System;
 using OpenQA.Selenium;
-using VacancyFinder.Interfaces;
+using VacancyFinder.Contracts;
 using System.Collections.ObjectModel;
 
 namespace VacancyFinder.Service

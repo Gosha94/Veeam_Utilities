@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinWatcher", "WinWatcher\WinWatcher.csproj", "{9BE9A016-9DB7-4B9C-B2CF-0E1D9AC6C6CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VacancyFinder", "VacancyFinder\VacancyFinder.csproj", "{4364C625-C311-4435-8E13-07A0E2A8F341}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VacancyFinder", "VacancyFinder\VacancyFinder.csproj", "{4364C625-C311-4435-8E13-07A0E2A8F341}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{60FFFB9C-7393-4A30-851B-EDD99C707F63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F7C2FB6C-8B48-4A0A-8554-C7CE60FEC587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9BE9A016-9DB7-4B9C-B2CF-0E1D9AC6C6CE} = {60FFFB9C-7393-4A30-851B-EDD99C707F63}
+		{4364C625-C311-4435-8E13-07A0E2A8F341} = {60FFFB9C-7393-4A30-851B-EDD99C707F63}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC753B9E-C502-4B8A-BB3E-BC3F20C759AD}

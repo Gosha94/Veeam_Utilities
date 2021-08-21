@@ -1,4 +1,4 @@
-﻿namespace VacancyFinder.Interfaces
+﻿namespace VacancyFinder.Contracts
 {
     public interface IService
     {
