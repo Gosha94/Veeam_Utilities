@@ -3,6 +3,7 @@ using OpenQA.Selenium.Opera;
 using VacancyFinder.Models;
 using VacancyFinder.Service;
 using VacancyFinder.Configuration;
+using VacancyFinder.PageObjects;
 
 namespace VacancyFinder.Controllers
 {
@@ -16,23 +17,24 @@ namespace VacancyFinder.Controllers
 
         private IWebDriver _driver;
 
-        private ClickerService       _clicker;
+        private ClickerService       _clickerServ;
         private FindVacancyModel     _vacancyModel;
-        //private BrowserNavigationService _searchEngine;
+        private DisplayService       _displayServ;
+        private VacancyPage          _vacancyPage;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Конструктор контроллера
+        /// Конструктор контроллера с аргументами
         /// </summary>
         /// <param name="cmdArgs"></param>
         public VacancyController(string[] cmdArgs)
         {
-            _clicker      = new ClickerService();
-            //_searchEngine = new BrowserNavigationService();
-            _vacancyModel = new FindVacancyModel(cmdArgs);
+            _clickerServ      = new ClickerService();
+            _displayServ      = new DisplayService();            
+            _vacancyModel     = new FindVacancyModel(cmdArgs);
 
             ConfigureWebDriver();
         }
@@ -42,20 +44,15 @@ namespace VacancyFinder.Controllers
         #region Public API
 
         /// <summary>
-        /// Публичный API контроллера для выполнения работы
+        /// Публичный API контроллера для выполнения поиска вакансий
         /// </summary>
         public void FindVacancies()
         {
-            //SignInSite(_driver);
-
-            //SelectDepartamentOnSite(_driver);
-
-            //SelectLanguageOnSite(_driver);
-
-            //CountOfVacanciesOnSite(_driver);
-
-            _driver.Quit();
-
+            _vacancyPage.SignInSite();
+            _vacancyPage.SelectDepartamentOnSite();
+            _vacancyPage.SelectLanguageOnSite();
+            _vacancyPage.CountOfVacanciesOnSite();
+            _vacancyPage.Close();
         }
 
         #endregion
@@ -65,9 +62,14 @@ namespace VacancyFinder.Controllers
         /// </summary>
         private void ConfigureWebDriver()
         {
+            var sizeWindow = _displayServ.GetDisplayResolution();
             var options = new OperaOptions();
-            options.BinaryLocation = ConfigurationModel.PathToBrowserBinFolder;
+            
+            options.BinaryLocation = ConfigurationModel.PathToBrowserBinFolder;            
+            options.AddArgument($"--window-size={sizeWindow.Width},{sizeWindow.Height}");
+
             _driver = new OperaDriver(ConfigurationModel.PathToWebDriverFolder, options);
+
         }
 
     }

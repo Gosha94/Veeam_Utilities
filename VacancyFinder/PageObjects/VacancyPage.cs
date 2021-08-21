@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Windows;
 using OpenQA.Selenium;
 using System.Collections.Generic;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace VacancyFinder.PageObjects
 {
+    /// <summary>
+    /// Модель тестируемой веб-страницы Вакансии
+    /// </summary>
     public class VacancyPage
     {
 
@@ -48,7 +52,7 @@ namespace VacancyFinder.PageObjects
             _driver = driver;
         }
 
-        #endregion        
+        #endregion
 
         #region Public Methods
 
@@ -69,8 +73,8 @@ namespace VacancyFinder.PageObjects
         {
             IWindow window = driver.Manage().Window;
             var size = window.Size;
-            var currentScreenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-            var currentScreenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+            var currentScreenWidth  = SystemParameters.PrimaryScreenWidth;
+            var currentScreenHeight = SystemParameters.PrimaryScreenHeight;
         }
 
         /// <summary>
