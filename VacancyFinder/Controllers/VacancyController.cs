@@ -18,7 +18,7 @@ namespace VacancyFinder.Controllers
 
         private ClickerService       _clicker;
         private FindVacancyModel     _vacancyModel;
-        private BrowserSearchService _searchEngine;
+        //private BrowserNavigationService _searchEngine;
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace VacancyFinder.Controllers
         public VacancyController(string[] cmdArgs)
         {
             _clicker      = new ClickerService();
-            _searchEngine = new BrowserSearchService();
+            //_searchEngine = new BrowserNavigationService();
             _vacancyModel = new FindVacancyModel(cmdArgs);
 
             ConfigureWebDriver();
@@ -46,13 +46,13 @@ namespace VacancyFinder.Controllers
         /// </summary>
         public void FindVacancies()
         {
-            SignInSite(_driver);
+            //SignInSite(_driver);
 
-            SelectDepartamentOnSite(_driver);
+            //SelectDepartamentOnSite(_driver);
 
-            SelectLanguageOnSite(_driver);
+            //SelectLanguageOnSite(_driver);
 
-            CountOfVacanciesOnSite(_driver);
+            //CountOfVacanciesOnSite(_driver);
 
             _driver.Quit();
 
