@@ -3,6 +3,7 @@ using System.Windows;
 using OpenQA.Selenium;
 using System.Collections.Generic;
 using OpenQA.Selenium.Support.PageObjects;
+using OpenQA.Selenium.Support.UI;
 
 namespace VacancyFinder.PageObjects
 {
@@ -11,7 +12,7 @@ namespace VacancyFinder.PageObjects
     /// </summary>
     public class VacancyPage
     {
-
+        
         #region Private Fields
 
         private IWebDriver _driver;
@@ -50,6 +51,9 @@ namespace VacancyFinder.PageObjects
         public VacancyPage(IWebDriver driver)
         {
             _driver = driver;
+            
+            // Устанавливаем время опроса DOM элемента, если недоступен
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
 
         #endregion
@@ -78,17 +82,10 @@ namespace VacancyFinder.PageObjects
         }
 
         /// <summary>
-        /// Вспомогательный метод для информативного ожидания между действиями в браузере
-        /// </summary>
-        /// <param name="driver">экземпляр конкретного веб-драйвера</param>
-        /// <param name="seconds">время ожидания драйвера в секундах</param>
-        public void WaitForPageLoad(IWebDriver driver, int seconds) => driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(seconds);
-
-        /// <summary>
         /// Метод входа на сайт
         /// </summary>
         /// <param name="driver"></param>
-        private void SignInSite(IWebDriver driver)
+        public void SignInSite()
         {
             //_searchEngine.GoToUrl(driver, _veeamUrl);
             //_searchEngine.ExpandBrowser(driver);
@@ -99,7 +96,7 @@ namespace VacancyFinder.PageObjects
         /// Метод выбора отдела на сайте
         /// </summary>
         /// <param name="driver"></param>
-        private void SelectDepartamentOnSite(IWebDriver driver)
+        public void SelectDepartamentOnSite()
         {
             //var deptButtonElem = driver.FindElement(By.XPath(_departmentButtonFullXPath));
             //_clicker.ClickOnSingleElement(deptButtonElem);
@@ -115,7 +112,7 @@ namespace VacancyFinder.PageObjects
         /// <summary>
         /// Метод выбора языка на сайте
         /// </summary>
-        private void SelectLanguageOnSite(IWebDriver driver)
+        public void SelectLanguageOnSite()
         {
             //var languageButtonElem = driver.FindElement(By.XPath(_languageButtonFullXPath));
             //_clicker.ClickOnSingleElement(languageButtonElem);
@@ -133,27 +130,43 @@ namespace VacancyFinder.PageObjects
         /// <summary>
         /// Метод подсчета вакансий на сайте
         /// </summary>
-        private void CountOfVacanciesOnSite(IWebDriver driver)
+        public void CountOfVacanciesOnSite()
         {
-            //_searchEngine.WaitForPageLoad(driver, 1);
+            //WaitForPageLoad(1);
 
-            //var vacanciesList = driver.FindElements(By.XPath(_vacancyListXPath));
+            var vacanciesList = _driver.FindElements(By.XPath(_vacancyListXPath));
 
-            //var vacNumber = vacanciesList.Count;
+            var vacNumber = vacanciesList.Count;
 
-            //Console.Clear();
+            Console.Clear();
 
-            //if (vacNumber == _vacancyModel.VacancyNumber)
-            //{
-            //    Console.ForegroundColor = ConsoleColor.Green;
-            //    Console.WriteLine($"Кол-во вакансий соответствует ожидаемому: {_vacancyModel.VacancyNumber}");
-            //}
-            //else
-            //{
-            //    Console.ForegroundColor = ConsoleColor.Red;
-            //    Console.WriteLine("Ошибка! Кол-во вакансий отличается от ожидаемого!");
-            //}
+            if (vacNumber == _vacancyModel.VacancyNumber)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Кол-во вакансий соответствует ожидаемому: {_vacancyModel.VacancyNumber}");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка! Кол-во вакансий отличается от ожидаемого!");
+            }
         }
+
+        /// <summary>
+        /// Метод закрытия веб страницы
+        /// </summary>
+        public void ClosePage() => _driver.Quit();
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Вспомогательный метод для информативного ожидания между действиями в браузере
+        /// </summary>
+        /// <param name="driver">экземпляр конкретного веб-драйвера</param>
+        /// <param name="seconds">время ожидания драйвера в секундах</param>
+        private void WaitForPageLoad(int seconds) => _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(seconds);
 
         #endregion
 

@@ -33,10 +33,12 @@ namespace VacancyFinder.Controllers
         public VacancyController(string[] cmdArgs)
         {
             _clickerServ      = new ClickerService();
-            _displayServ      = new DisplayService();            
+            _displayServ      = new DisplayService();
             _vacancyModel     = new FindVacancyModel(cmdArgs);
+            _driver = ConfigureWebDriver();
 
-            ConfigureWebDriver();
+            _vacancyPage = new VacancyPage();
+
         }
 
         #endregion
@@ -52,25 +54,28 @@ namespace VacancyFinder.Controllers
             _vacancyPage.SelectDepartamentOnSite();
             _vacancyPage.SelectLanguageOnSite();
             _vacancyPage.CountOfVacanciesOnSite();
-            _vacancyPage.Close();
+            _vacancyPage.ClosePage();
         }
 
         #endregion
 
+        #region Private Methods
+
         /// <summary>
         /// Конфигурация веб-драйвера
         /// </summary>
-        private void ConfigureWebDriver()
+        private IWebDriver ConfigureWebDriver()
         {
             var sizeWindow = _displayServ.GetDisplayResolution();
             var options = new OperaOptions();
-            
-            options.BinaryLocation = ConfigurationModel.PathToBrowserBinFolder;            
+
+            options.BinaryLocation = ConfigurationModel.PathToBrowserBinFolder;
             options.AddArgument($"--window-size={sizeWindow.Width},{sizeWindow.Height}");
 
-            _driver = new OperaDriver(ConfigurationModel.PathToWebDriverFolder, options);
-
+            return new OperaDriver(ConfigurationModel.PathToWebDriverFolder, options);
         }
+
+        #endregion
 
     }
 }
