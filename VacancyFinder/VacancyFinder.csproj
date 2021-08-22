@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebDriver\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="WebDriver\operadriver.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

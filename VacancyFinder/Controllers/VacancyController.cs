@@ -1,9 +1,10 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Opera;
 using VacancyFinder.Models;
 using VacancyFinder.Service;
-using VacancyFinder.Configuration;
 using VacancyFinder.PageObjects;
+using VacancyFinder.WebDriver.Configuration;
 
 namespace VacancyFinder.Controllers
 {
@@ -15,9 +16,6 @@ namespace VacancyFinder.Controllers
 
         #region Private Fields
 
-        private IWebDriver _driver;
-
-        private ClickerService       _clickerServ;
         private FindVacancyModel     _vacancyModel;
         private DisplayService       _displayServ;
         private VacancyPage          _vacancyPage;
@@ -32,18 +30,21 @@ namespace VacancyFinder.Controllers
         /// <param name="cmdArgs"></param>
         public VacancyController(string[] cmdArgs)
         {
-            _clickerServ      = new ClickerService();
-            _displayServ      = new DisplayService();
-            _vacancyModel     = new FindVacancyModel(cmdArgs);
-            _driver = ConfigureWebDriver();
-
-            _vacancyPage = new VacancyPage();
-
+            
+            _displayServ                     = new DisplayService();
+            _vacancyModel                    = new FindVacancyModel(cmdArgs);
+            this.ConfiguredWebDriverInstance = ConfigureWebDriver();
+            _vacancyPage                     = new VacancyPage(this.ConfiguredWebDriverInstance);
         }
 
         #endregion
 
         #region Public API
+
+        /// <summary>
+        /// Настроенный веб-драйвер
+        /// </summary>
+        public IWebDriver ConfiguredWebDriverInstance { get; private set; }
 
         /// <summary>
         /// Публичный API контроллера для выполнения поиска вакансий
@@ -53,7 +54,7 @@ namespace VacancyFinder.Controllers
             _vacancyPage.SignInSite();
             _vacancyPage.SelectDepartamentOnSite();
             _vacancyPage.SelectLanguageOnSite();
-            _vacancyPage.CountOfVacanciesOnSite();
+            CountOfVacanciesOnSite();
             _vacancyPage.ClosePage();
         }
 
@@ -69,10 +70,32 @@ namespace VacancyFinder.Controllers
             var sizeWindow = _displayServ.GetDisplayResolution();
             var options = new OperaOptions();
 
-            options.BinaryLocation = ConfigurationModel.PathToBrowserBinFolder;
+            options.BinaryLocation = OperaDriverConfigModel.PathToBrowserBinFolder;
             options.AddArgument($"--window-size={sizeWindow.Width},{sizeWindow.Height}");
 
-            return new OperaDriver(ConfigurationModel.PathToWebDriverFolder, options);
+            return new OperaDriver(OperaDriverConfigModel.PathToWebDriverFolder, options);
+        }
+
+        /// <summary>
+        /// Метод подсчета вакансий на сайте
+        /// </summary>
+        public void CountOfVacanciesOnSite()
+        {
+
+            var vacNumber = _vacanciesList.Count;
+
+            Console.Clear();
+
+            if (vacNumber == _vacancyModel.VacancyNumber)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Кол-во вакансий соответствует ожидаемому: {_vacancyModel.VacancyNumber}");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка! Кол-во вакансий отличается от ожидаемого!");
+            }
         }
 
         #endregion

@@ -1,9 +1,9 @@
-﻿namespace VacancyFinder.Configuration
+﻿namespace VacancyFinder.WebDriver.Configuration
 {
     /// <summary>
-    /// Класс, содержащий константы для веб-элементов и основные пути к папкам
+    /// Модель конфигурации веб-драйвера
     /// </summary>
-    public static class ConfigurationModel
+    public static class OperaDriverConfigModel
     {
 
         /// <summary>
