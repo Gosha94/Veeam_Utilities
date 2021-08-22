@@ -49,7 +49,7 @@ namespace VacancyFinder.NUnit.Tests
             var expectedWindowSize = displayServ.GetDisplayResolution();
 
             // Act
-            _vacancyPageUnderTests.ExpandBrowser(_webDriver);
+            _vacancyPageUnderTests.ExpandBrowser();
             var actualWindowSize = _vacancyPageUnderTests.PageSize;
 
             var isScreenMaximized = IsScreensSizesEqual(expectedWindowSize, actualWindowSize);

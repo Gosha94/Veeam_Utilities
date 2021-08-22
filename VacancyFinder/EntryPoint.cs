@@ -10,7 +10,7 @@ namespace VacancyFinder
             try
             {
                 var vacController = new VacancyController(args);
-                vacController.FindVacancies();
+                vacController.CountConcreteVacancies();
             }
             catch (Exception ex)
             {

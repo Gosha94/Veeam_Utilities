@@ -2,8 +2,10 @@
 using System.Drawing;
 using OpenQA.Selenium;
 using System.Collections.Generic;
-using OpenQA.Selenium.Support.PageObjects;
+using SeleniumExtras.PageObjects;
 using VacancyFinder.Service;
+using TestProject.SDK.PageObjects;
+using System.Collections.ObjectModel;
 
 namespace VacancyFinder.PageObjects
 {
@@ -16,7 +18,6 @@ namespace VacancyFinder.PageObjects
         #region Private Fields
 
         private IWebDriver      _driver;
-        private ClickerService  _clickerServ;
 
         /// <summary>
         /// URL путь к странице
@@ -26,38 +27,58 @@ namespace VacancyFinder.PageObjects
         #endregion
 
         #region Web Elements Under Test
+        
+        /// <summary>
+        /// Кнопка для выбора отделов
+        /// </summary>
+        [FindsBy(How = How.XPath, Using = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/button")]        
+        private IWebElement _departmentsButton;
+
+        /// <summary>
+        /// Кнопка для выбора языков
+        /// </summary>
+        [FindsBy(How = How.XPath, Using = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/button")]        
+        private IWebElement _languageButton;
 
         /// <summary>
         /// Выпадающий список с выбором отделов
-        /// </summary>
-        [FindsBy(How = How.XPath, Using = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div/a")]
+        /// </summary>        
         private List<IWebElement> _departmentsDropdownMenu;
+        
+        private const string _departmentDropDownXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div";
 
         /// <summary>
         /// Выпадающий список с выбором языка
-        /// </summary>
-        [FindsBy(How = How.XPath, Using = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div/div")]
+        /// </summary>        
         private List<IWebElement> _languageDropdownMenu;
+
+        private const string _languageDropDownXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div";
 
         /// <summary>
         /// Список вакансий на сайте
-        /// </summary>
-        [FindsBy(How = How.XPath, Using = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[2]/div/a")]
+        /// </summary>        
         private List<IWebElement> _vacanciesList;
+
+        private const string _vacanciesListXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[2]/div";
 
         #endregion
 
         #region Constructor
-        
+
         public VacancyPage(IWebDriver driver)
         {
             _driver = driver;
-            _clickerServ = new ClickerService();
+            GoToUrl();
             // Устанавливаем время опроса DOM элемента, если недоступен
-            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-        }
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            PageFactory.InitElements(_driver, this);
 
-        
+            var t = _languageButton.Text;
+            var r = _departmentsButton.Text;
+
+            Console.WriteLine();
+
+        }
 
         #endregion
 
@@ -67,6 +88,11 @@ namespace VacancyFinder.PageObjects
         /// Свойство определяет размер веб-страницы в пикселях
         /// </summary>
         public Size PageSize { get; private set; }
+
+        /// <summary>
+        /// Кол-во вакансий на странице
+        /// </summary>
+        public int NumberOfVacanсiesOnPage { get; private set; }
 
         #endregion
 
@@ -105,11 +131,9 @@ namespace VacancyFinder.PageObjects
         /// <param name="driver"></param>
         public bool SelectDepartamentOnSite(string departmentName)
         {
-            var departmentButtonElement = GetElementFromDropDownMenu(_departmentsDropdownMenu);
+            var departmentButtonElement = GetElementFromDropDownMenu(_departmentsDropdownMenu, departmentName);
 
-            _clickerServ.ClickOnSingleElement(departmentButtonElement);
-
-            _clickerServ.ClickOnElementInDropDownList(_departmentsDropdownMenu, departmentName);
+            ClickOnSingleElement(departmentButtonElement);
 
             return true;
         }
@@ -119,15 +143,19 @@ namespace VacancyFinder.PageObjects
         /// </summary>
         public bool SelectLanguageOnSite(string languageValue)
         {
-            var languageButtonElement = GetElementFromDropDownMenu(_languageDropdownMenu);
+            var languageButtonElement = GetElementFromDropDownMenu(_languageDropdownMenu, languageValue);
 
-            _clickerServ.ClickOnSingleElement(languageButtonElement);
-            
-            _clickerServ.ClickOnElementInDropDownList(_languageDropdownMenu, languageValue);
-            _clickerServ.ClickOnSingleElement(languageButtonElement);
+            ClickOnSingleElement(languageButtonElement);
+
+            ClickOnSingleElement(languageButtonElement);
             
             return true;
         }
+
+        /// <summary>
+        /// Метод подсчета вакансий на странице
+        /// </summary>
+        public void CountVacanciesOnPage() => NumberOfVacanсiesOnPage = _vacanciesList.Count;
 
         /// <summary>
         /// Метод закрытия веб страницы
@@ -142,7 +170,7 @@ namespace VacancyFinder.PageObjects
         /// Метод получения кнопки
         /// </summary>
         /// <returns></returns>
-        private IWebElement GetElementFromDropDownMenu(List<IWebElement> webMenu, string searchElementName)
+        private IWebElement GetElementFromDropDownMenu(IReadOnlyCollection<IWebElement> webMenu, string searchElementName)
         {
             var comparer = StringComparer.OrdinalIgnoreCase;
 

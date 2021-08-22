@@ -5,6 +5,7 @@ using VacancyFinder.Models;
 using VacancyFinder.Service;
 using VacancyFinder.PageObjects;
 using VacancyFinder.WebDriver.Configuration;
+using TestProject.SDK.PageObjects;
 
 namespace VacancyFinder.Controllers
 {
@@ -34,7 +35,7 @@ namespace VacancyFinder.Controllers
             _displayServ                     = new DisplayService();
             _vacancyModel                    = new FindVacancyModel(cmdArgs);
             this.ConfiguredWebDriverInstance = ConfigureWebDriver();
-            _vacancyPage                     = new VacancyPage(this.ConfiguredWebDriverInstance);
+            _vacancyPage                     = new VacancyPage(this.ConfiguredWebDriverInstance);            
         }
 
         #endregion
@@ -47,14 +48,16 @@ namespace VacancyFinder.Controllers
         public IWebDriver ConfiguredWebDriverInstance { get; private set; }
 
         /// <summary>
-        /// Публичный API контроллера для выполнения поиска вакансий
+        /// Публичный API контроллера для подсчета вакансий
         /// </summary>
-        public void FindVacancies()
+        public void CountConcreteVacancies()
         {
             _vacancyPage.SignInSite();
-            _vacancyPage.SelectDepartamentOnSite();
-            _vacancyPage.SelectLanguageOnSite();
-            CountOfVacanciesOnSite();
+            _vacancyPage.SelectDepartamentOnSite(_vacancyModel.DepartmentName);
+            _vacancyPage.SelectLanguageOnSite(_vacancyModel.LanguageName);
+            
+            CountOfSiteVacancies();
+
             _vacancyPage.ClosePage();
         }
 
@@ -79,10 +82,11 @@ namespace VacancyFinder.Controllers
         /// <summary>
         /// Метод подсчета вакансий на сайте
         /// </summary>
-        public void CountOfVacanciesOnSite()
+        private void CountOfSiteVacancies()
         {
+            _vacancyPage.CountVacanciesOnPage();
 
-            var vacNumber = _vacanciesList.Count;
+            var vacNumber = _vacancyPage.NumberOfVacanсiesOnPage;
 
             Console.Clear();
 
