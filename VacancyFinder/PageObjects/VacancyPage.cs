@@ -60,7 +60,7 @@ namespace VacancyFinder.PageObjects
         /// </summary>        
         private List<IWebElement> _vacanciesList;
 
-        private const string _vacanciesListXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[2]/div";
+        private const string _vacanciesListXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[2]/div/a";
 
         #endregion
 
@@ -160,7 +160,13 @@ namespace VacancyFinder.PageObjects
         /// <summary>
         /// Метод подсчета вакансий на странице
         /// </summary>
-        public void CountVacanciesOnPage() => NumberOfVacanсiesOnPage = _vacanciesList.Count;
+        public int CountVacanciesOnPage()
+        {
+            _vacanciesList = _driver.FindElements(By.XPath(_vacanciesListXPath)).ToList();
+            NumberOfVacanсiesOnPage = _vacanciesList.Count;
+            
+            return _vacanciesList.Count;
+        }
 
         /// <summary>
         /// Метод закрытия веб страницы
@@ -175,7 +181,7 @@ namespace VacancyFinder.PageObjects
         /// Метод получения кнопки
         /// </summary>
         /// <returns></returns>
-        private IWebElement GetElementFromDropDownMenu(IReadOnlyCollection<IWebElement> webMenu, string searchElementName)
+        private IWebElement GetElementFromDropDownMenu(IEnumerable<IWebElement> webMenu, string searchElementName)
         {
             var comparer = StringComparer.OrdinalIgnoreCase;
 

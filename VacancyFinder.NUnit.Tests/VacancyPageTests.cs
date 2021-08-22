@@ -14,8 +14,7 @@ namespace VacancyFinder.NUnit.Tests
         /// <summary>
         /// Поле для тестовых аргументов
         /// </summary>
-        private String[] _testArguments;
-
+        private String[]          _testArguments;
         private VacancyController _vacancyController;
         private IWebDriver        _webDriver;
         private VacancyPage       _vacancyPageUnderTests;
@@ -23,22 +22,57 @@ namespace VacancyFinder.NUnit.Tests
         [SetUp]
         public void Setup()
         {
-            _testArguments      = new String[] { "Отдел разработки", "Английский", "6" };
-            _vacancyController  = new VacancyController(_testArguments);
-            _webDriver          = _vacancyController.ConfiguredWebDriverInstance;
+            _testArguments          = new String[] { "Разработка продуктов", "Английский", "6" };
+            _vacancyController      = new VacancyController(_testArguments);
+            _webDriver              = _vacancyController.ConfiguredWebDriverInstance;
+            _vacancyPageUnderTests  = new VacancyPage(_webDriver);
+        }
+
+        [TearDown]
+        public void EachTestEnd()
+        {
+            _vacancyPageUnderTests.ClosePage();
+        }
+
+        [Test]
+        public void GoToUrlTest_PassWhenWebPageTitleIsCorrect()
+        {
+
+            // Arrange
+            var expectedTitle = "Работа в IT компании Veeam Software";
+
+            // Act
+            _vacancyPageUnderTests.GoToUrl();
+            var actualTitle = _webDriver.Title;
+
+            // Assert
+            Assert.AreEqual(expectedTitle, actualTitle);
         }
 
         [Test]        
         public void SelectDepartmentFromDropDownListTest_PassWhenDepartmentNameCorrect()
         {
-            
-            Assert.True(_webDriver.Title.Contains("Veeam"));
+            // Arrange            
+            IWebElement departmentButton;
+
+            // Act
+            departmentButton = _vacancyPageUnderTests.SelectDepartamentOnSite(_testArguments[0]);
+
+            // Assert
+            Assert.True(departmentButton.Text.Contains("Разработка продуктов"));
         }
 
         [Test]
         public void SelectLanguageFromDropDownListTest_PassWhenLanguageNameCorrect()
         {
-            Assert.True(_webDriver.Title.Contains("Veeam"));
+            // Arrange            
+            IWebElement languageButton;
+
+            // Act
+            languageButton = _vacancyPageUnderTests.SelectLanguageOnSite(_testArguments[1]);
+
+            // Assert
+            Assert.True(languageButton.Text.Contains("Английский"));
         }
 
         [Test]
