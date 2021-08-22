@@ -6,6 +6,7 @@ using SeleniumExtras.PageObjects;
 using VacancyFinder.Service;
 using TestProject.SDK.PageObjects;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace VacancyFinder.PageObjects
 {
@@ -44,15 +45,15 @@ namespace VacancyFinder.PageObjects
         /// Выпадающий список с выбором отделов
         /// </summary>        
         private List<IWebElement> _departmentsDropdownMenu;
-        
-        private const string _departmentDropDownXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div";
+
+        private const string _departmentDropDownXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[2]/div/div/div/a";
 
         /// <summary>
         /// Выпадающий список с выбором языка
         /// </summary>        
         private List<IWebElement> _languageDropdownMenu;
 
-        private const string _languageDropDownXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div";
+        private const string _languageDropDownXPath = @"//*[@id=""root""]/div/div[1]/div/div[2]/div[1]/div/div[3]/div/div/div/div";
 
         /// <summary>
         /// Список вакансий на сайте
@@ -71,13 +72,9 @@ namespace VacancyFinder.PageObjects
             GoToUrl();
             // Устанавливаем время опроса DOM элемента, если недоступен
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            
+            // Инициализируем поля объекта значениями
             PageFactory.InitElements(_driver, this);
-
-            var t = _languageButton.Text;
-            var r = _departmentsButton.Text;
-
-            Console.WriteLine();
-
         }
 
         #endregion
@@ -129,27 +126,35 @@ namespace VacancyFinder.PageObjects
         /// Метод выбора отдела на сайте
         /// </summary>
         /// <param name="driver"></param>
-        public bool SelectDepartamentOnSite(string departmentName)
+        public IWebElement SelectDepartamentOnSite(string departmentName)
         {
+            ClickOnSingleElement(_departmentsButton);
+
+            _departmentsDropdownMenu = _driver.FindElements(By.XPath(_departmentDropDownXPath)).ToList();
+            
             var departmentButtonElement = GetElementFromDropDownMenu(_departmentsDropdownMenu, departmentName);
 
             ClickOnSingleElement(departmentButtonElement);
 
-            return true;
+            return departmentButtonElement;
         }
 
         /// <summary>
         /// Метод выбора языка на сайте
         /// </summary>
-        public bool SelectLanguageOnSite(string languageValue)
+        public IWebElement SelectLanguageOnSite(string languageValue)
         {
-            var languageButtonElement = GetElementFromDropDownMenu(_languageDropdownMenu, languageValue);
-
-            ClickOnSingleElement(languageButtonElement);
-
-            ClickOnSingleElement(languageButtonElement);
+            ClickOnSingleElement(_languageButton);
             
-            return true;
+            _languageDropdownMenu = _driver.FindElements(By.XPath(_languageDropDownXPath)).ToList();
+
+            var languageButtonElement = GetElementFromDropDownMenu(_languageDropdownMenu, languageValue);
+            
+            ClickOnSingleElement(languageButtonElement);
+
+            ClickOnSingleElement(_languageButton);
+            
+            return languageButtonElement;
         }
 
         /// <summary>
