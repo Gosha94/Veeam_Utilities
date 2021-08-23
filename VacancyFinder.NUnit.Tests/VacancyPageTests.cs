@@ -81,10 +81,15 @@ namespace VacancyFinder.NUnit.Tests
         [Test]
         public void CheckIfWindowIsMaximized_PassIfBrowserSizeEqualsScreenSize()
         {
-            // Arrange            
-            var expectedWindowSize = new Size(1936, 1056);
+            // Arrange
+            var browserHeader = ( Width: 16, Height: 24 );
+
+            var displayService = new DisplayService();
+            var displayResolution = displayService.GetDisplayResolution();
+            var expectedWindowSize = new Size(displayResolution.Width + browserHeader.Width, displayResolution.Height - browserHeader.Height);
 
             // Act
+            _vacancyPageUnderTests.GoToUrl();
             _vacancyPageUnderTests.ExpandBrowser();
             var actualWindowSize = _vacancyPageUnderTests.PageSize;
             var isScreenMaximized = IsScreensSizesEqual(expectedWindowSize, actualWindowSize);
