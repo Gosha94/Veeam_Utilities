@@ -1,8 +1,9 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace WinWatcher.NUnit.Tests
 {
-    public class Tests
+    [TestFixture]
+    public class ProcessWatcherServiceTests
     {
         [SetUp]
         public void Setup()
