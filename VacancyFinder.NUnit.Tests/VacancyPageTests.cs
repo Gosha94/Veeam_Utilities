@@ -5,6 +5,7 @@ using VacancyFinder.Controllers;
 using OpenQA.Selenium;
 using VacancyFinder.PageObjects;
 using System.Drawing;
+using TestProject.SDK.Interfaces;
 
 namespace VacancyFinder.NUnit.Tests
 {
@@ -32,6 +33,7 @@ namespace VacancyFinder.NUnit.Tests
         public void EachTestEnd()
         {
             _vacancyPageUnderTests.ClosePage();
+            _webDriver.Dispose();
         }
 
         [Test]
@@ -54,10 +56,11 @@ namespace VacancyFinder.NUnit.Tests
         {
             // Arrange            
             IWebElement departmentButton;
+            _vacancyPageUnderTests.SignInSite();
 
             // Act
             departmentButton = _vacancyPageUnderTests.SelectDepartamentOnSite(_testArguments[0]);
-
+            var text = departmentButton.Text;
             // Assert
             Assert.True(departmentButton.Text.Contains("Разработка продуктов"));
         }
@@ -78,15 +81,14 @@ namespace VacancyFinder.NUnit.Tests
         [Test]
         public void CheckIfWindowIsMaximized_PassIfBrowserSizeEqualsScreenSize()
         {
-            // Arrange
-            var displayServ = new DisplayService();
-            var expectedWindowSize = displayServ.GetDisplayResolution();
+            // Arrange            
+            var expectedWindowSize = new Size(1936, 1056);
 
             // Act
             _vacancyPageUnderTests.ExpandBrowser();
             var actualWindowSize = _vacancyPageUnderTests.PageSize;
-
             var isScreenMaximized = IsScreensSizesEqual(expectedWindowSize, actualWindowSize);
+
             // Assert
             Assert.IsTrue(isScreenMaximized);
         }
@@ -94,8 +96,15 @@ namespace VacancyFinder.NUnit.Tests
         #region Help Test Private Methods
 
         private bool IsScreensSizesEqual(Size firstScreenSz, Size secondScreenSz)
-            => firstScreenSz.Width == secondScreenSz.Width
-                 &&  firstScreenSz.Height == secondScreenSz.Height;
+        {
+            if (firstScreenSz.Width == secondScreenSz.Width
+                 && firstScreenSz.Height == secondScreenSz.Height)
+            {
+                return true;
+            }
+            return false;
+        }
+            
 
         #endregion
 
