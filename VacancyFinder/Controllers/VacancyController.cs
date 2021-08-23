@@ -50,15 +50,13 @@ namespace VacancyFinder.Controllers
         /// <summary>
         /// Публичный API контроллера для подсчета вакансий
         /// </summary>
-        public void CountConcreteVacancies()
+        public int CountConcreteVacancies()
         {
             _vacancyPage.SignInSite();
             _vacancyPage.SelectDepartamentOnSite(_vacancyModel.DepartmentName);
             _vacancyPage.SelectLanguageOnSite(_vacancyModel.LanguageName);
-            
-            CountOfSiteVacancies();
 
-            _vacancyPage.ClosePage();
+            return CountOfSiteVacancies();
         }
 
         #endregion
@@ -82,23 +80,20 @@ namespace VacancyFinder.Controllers
         /// <summary>
         /// Метод подсчета вакансий на сайте
         /// </summary>
-        private void CountOfSiteVacancies()
+        private int CountOfSiteVacancies()
         {
             _vacancyPage.CountVacanciesOnPage();
 
             var vacNumber = _vacancyPage.NumberOfVacanсiesOnPage;
 
-            Console.Clear();
-
             if (vacNumber == _vacancyModel.VacancyNumber)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Кол-во вакансий соответствует ожидаемому: {_vacancyModel.VacancyNumber}");
+                //Console.WriteLine($"Кол-во вакансий соответствует ожидаемому: {_vacancyModel.VacancyNumber}");
+                return _vacancyModel.VacancyNumber;
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка! Кол-во вакансий отличается от ожидаемого!");
+                throw new ArithmeticException("Ошибка! Кол-во вакансий отличается от ожидаемого!");
             }
         }
 

@@ -5,7 +5,6 @@ using VacancyFinder.Controllers;
 using OpenQA.Selenium;
 using VacancyFinder.PageObjects;
 using System.Drawing;
-using TestProject.SDK.Interfaces;
 
 namespace VacancyFinder.NUnit.Tests
 {
@@ -15,7 +14,7 @@ namespace VacancyFinder.NUnit.Tests
         /// <summary>
         /// Поле для тестовых аргументов
         /// </summary>
-        private String[]          _testArguments;
+        private String[]          _correctTestArguments;
         private VacancyController _vacancyController;
         private IWebDriver        _webDriver;
         private VacancyPage       _vacancyPageUnderTests;
@@ -23,8 +22,8 @@ namespace VacancyFinder.NUnit.Tests
         [SetUp]
         public void Setup()
         {
-            _testArguments          = new String[] { "Разработка продуктов", "Английский", "6" };
-            _vacancyController      = new VacancyController(_testArguments);
+            _correctTestArguments   = new string[] { "Разработка продуктов", "Английский", "6" };
+            _vacancyController      = new VacancyController(_correctTestArguments);
             _webDriver              = _vacancyController.ConfiguredWebDriverInstance;
             _vacancyPageUnderTests  = new VacancyPage(_webDriver);
         }
@@ -54,39 +53,40 @@ namespace VacancyFinder.NUnit.Tests
         [Test]        
         public void SelectDepartmentFromDropDownListTest_PassWhenDepartmentNameCorrect()
         {
-            // Arrange            
-            IWebElement departmentButton;
+            // Arrange
             _vacancyPageUnderTests.SignInSite();
+            var expectedDeptBtnText = _correctTestArguments[0];
 
             // Act
-            departmentButton = _vacancyPageUnderTests.SelectDepartamentOnSite(_testArguments[0]);
-            var text = departmentButton.Text;
+            var actualDeptBtnText = _vacancyPageUnderTests.SelectDepartamentOnSite(_correctTestArguments[0]);
+            
             // Assert
-            Assert.True(departmentButton.Text.Contains("Разработка продуктов"));
+            Assert.AreEqual(expectedDeptBtnText, actualDeptBtnText);
         }
 
         [Test]
         public void SelectLanguageFromDropDownListTest_PassWhenLanguageNameCorrect()
         {
-            // Arrange            
-            IWebElement languageButton;
+            // Arrange
+            _vacancyPageUnderTests.SignInSite();
+            var expectedLanguageBtnText = _correctTestArguments[1];
 
             // Act
-            languageButton = _vacancyPageUnderTests.SelectLanguageOnSite(_testArguments[1]);
+            var actualLanguageBtnText = _vacancyPageUnderTests.SelectLanguageOnSite(_correctTestArguments[1]);
 
             // Assert
-            Assert.True(languageButton.Text.Contains("Английский"));
+            Assert.AreEqual(expectedLanguageBtnText, actualLanguageBtnText);
         }
 
         [Test]
         public void CheckIfWindowIsMaximized_PassIfBrowserSizeEqualsScreenSize()
         {
             // Arrange
-            var browserHeader = ( Width: 16, Height: 24 );
+            var browserHeaderSize = ( Width: 16, Height: 24 );
 
             var displayService = new DisplayService();
             var displayResolution = displayService.GetDisplayResolution();
-            var expectedWindowSize = new Size(displayResolution.Width + browserHeader.Width, displayResolution.Height - browserHeader.Height);
+            var expectedWindowSize = new Size(displayResolution.Width + browserHeaderSize.Width, displayResolution.Height - browserHeaderSize.Height);
 
             // Act
             _vacancyPageUnderTests.ExpandBrowser();
@@ -108,7 +108,6 @@ namespace VacancyFinder.NUnit.Tests
             }
             return false;
         }
-            
 
         #endregion
 

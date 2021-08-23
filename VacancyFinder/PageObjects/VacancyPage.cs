@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Drawing;
 using OpenQA.Selenium;
 using System.Collections.Generic;
 using SeleniumExtras.PageObjects;
-using VacancyFinder.Service;
 using TestProject.SDK.PageObjects;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace VacancyFinder.PageObjects
 {
@@ -126,7 +124,7 @@ namespace VacancyFinder.PageObjects
         /// Метод выбора отдела на сайте
         /// </summary>
         /// <param name="driver"></param>
-        public IWebElement SelectDepartamentOnSite(string departmentName)
+        public string SelectDepartamentOnSite(string departmentName)
         {
             ClickOnSingleElement(_departmentsButton);
 
@@ -136,13 +134,13 @@ namespace VacancyFinder.PageObjects
 
             ClickOnSingleElement(departmentButtonElement);
 
-            return departmentButtonElement;
+            return departmentButtonElement.GetAttribute("innerHTML");
         }
 
         /// <summary>
         /// Метод выбора языка на сайте
         /// </summary>
-        public IWebElement SelectLanguageOnSite(string languageValue)
+        public string SelectLanguageOnSite(string languageValue)
         {
             ClickOnSingleElement(_languageButton);
             
@@ -154,7 +152,7 @@ namespace VacancyFinder.PageObjects
 
             ClickOnSingleElement(_languageButton);
             
-            return languageButtonElement;
+            return _languageButton.GetAttribute("innerHTML");
         }
 
         /// <summary>
