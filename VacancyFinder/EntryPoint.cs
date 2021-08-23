@@ -8,15 +8,19 @@ namespace VacancyFinder
         static void Main(string[] args)
         {
             try
-            {                
+            {
                 var vacController = new VacancyController(args);
-                vacController.FindVacancies();
+                vacController.CountConcreteVacancies();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Возникло исключение: " + ex.Message);
             }
 
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("Для продолжения нажмите любую кнопку...");
             Console.ReadKey();
 
         }

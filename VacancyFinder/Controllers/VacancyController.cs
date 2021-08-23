@@ -3,7 +3,9 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Opera;
 using VacancyFinder.Models;
 using VacancyFinder.Service;
-using VacancyFinder.Configuration;
+using VacancyFinder.PageObjects;
+using VacancyFinder.WebDriver.Configuration;
+using TestProject.SDK.PageObjects;
 
 namespace VacancyFinder.Controllers
 {
@@ -15,31 +17,25 @@ namespace VacancyFinder.Controllers
 
         #region Private Fields
 
-        private FindVacancyModel _vacancyModel;
-        private ClickerService _clicker;
-        private BrowserSearchService _searchEngine;
-
-        private string _pathToWebDriverFolder       = ConfigurationModel.PathToWebDriverFolder;
-        private string _veeamUrl                    = ConfigurationModel.VeeamUrl;
-        private string _departmentButtonFullXPath   = ConfigurationModel.DepartmentButtonFullXPath;
-        private string _departmentDropDownXPath     = ConfigurationModel.DepartmentDropDownXPath;
-        private string _languageButtonFullXPath     = ConfigurationModel.LanguageButtonFullXPath;
-        private string _languageDropDownXPath       = ConfigurationModel.LanguageDropDownXPath;
-        private string _vacancyListXPath            = ConfigurationModel.VacancyListXPath;
+        private FindVacancyModel     _vacancyModel;
+        private DisplayService       _displayServ;
+        private VacancyPage          _vacancyPage;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Конструктор контроллера
+        /// Конструктор контроллера с аргументами
         /// </summary>
         /// <param name="cmdArgs"></param>
         public VacancyController(string[] cmdArgs)
         {
-            _vacancyModel = new FindVacancyModel(cmdArgs);
-            _clicker = new ClickerService();
-            _searchEngine = new BrowserSearchService();
+            
+            _displayServ                     = new DisplayService();
+            _vacancyModel                    = new FindVacancyModel(cmdArgs);
+            this.ConfiguredWebDriverInstance = ConfigureWebDriver();
+            _vacancyPage                     = new VacancyPage(this.ConfiguredWebDriverInstance);            
         }
 
         #endregion
@@ -47,20 +43,22 @@ namespace VacancyFinder.Controllers
         #region Public API
 
         /// <summary>
-        /// Публичный API контроллера для выполнения работы
+        /// Настроенный веб-драйвер
         /// </summary>
-        public void FindVacancies()
+        public IWebDriver ConfiguredWebDriverInstance { get; private set; }
+
+        /// <summary>
+        /// Публичный API контроллера для подсчета вакансий
+        /// </summary>
+        public void CountConcreteVacancies()
         {
-            using (IWebDriver driver = new OperaDriver(_pathToWebDriverFolder))
-            {
-                SignInSite(driver);
+            _vacancyPage.SignInSite();
+            _vacancyPage.SelectDepartamentOnSite(_vacancyModel.DepartmentName);
+            _vacancyPage.SelectLanguageOnSite(_vacancyModel.LanguageName);
+            
+            CountOfSiteVacancies();
 
-                SelectDepartamentOnSite(driver);
-
-                SelectLanguageOnSite(driver);
-
-                CountOfVacanciesOnSite(driver);
-            }
+            _vacancyPage.ClosePage();
         }
 
         #endregion
@@ -68,61 +66,27 @@ namespace VacancyFinder.Controllers
         #region Private Methods
 
         /// <summary>
-        /// Метод входа на сайт 
+        /// Конфигурация веб-драйвера
         /// </summary>
-        /// <param name="driver"></param>
-        private void SignInSite(IWebDriver driver)
+        private IWebDriver ConfigureWebDriver()
         {
-            _searchEngine.GoToUrl(driver, _veeamUrl);
-            _searchEngine.ExpandBrowser(driver);
-            _searchEngine.WaitForPageLoad(2);
-        }
+            var sizeWindow = _displayServ.GetDisplayResolution();
+            var options = new OperaOptions();
 
-        /// <summary>
-        /// Метод выбора отдела на сайте
-        /// </summary>
-        /// <param name="driver"></param>
-        private void SelectDepartamentOnSite(IWebDriver driver)
-        {
-            var deptButtonElem = driver.FindElement(By.XPath(_departmentButtonFullXPath));
-            _clicker.ClickOnSingleElement(deptButtonElem);
+            options.BinaryLocation = OperaDriverConfigModel.PathToBrowserBinFolder;
+            options.AddArgument($"--window-size={sizeWindow.Width},{sizeWindow.Height}");
 
-            _searchEngine.WaitForPageLoad(2);
-
-            var deptDropDown = driver.FindElements(By.XPath(_departmentDropDownXPath));
-            _clicker.ClickOnElementInDropDownList(deptDropDown, _vacancyModel.DepartmentName);
-
-            _searchEngine.WaitForPageLoad(2);
-        }
-
-        /// <summary>
-        /// Метод выбора языка на сайте
-        /// </summary>
-        private void SelectLanguageOnSite(IWebDriver driver)
-        {
-            var languageButtonElem = driver.FindElement(By.XPath(_languageButtonFullXPath));
-            _clicker.ClickOnSingleElement(languageButtonElem);
-
-            _searchEngine.WaitForPageLoad(2);
-
-            var languageDropDown = driver.FindElements(By.XPath(_languageDropDownXPath));
-            _clicker.ClickOnElementInDropDownList(languageDropDown, _vacancyModel.LanguageName);
-
-            _searchEngine.WaitForPageLoad(2);
-
-            _clicker.ClickOnSingleElement(languageButtonElem);
+            return new OperaDriver(OperaDriverConfigModel.PathToWebDriverFolder, options);
         }
 
         /// <summary>
         /// Метод подсчета вакансий на сайте
         /// </summary>
-        private void CountOfVacanciesOnSite(IWebDriver driver)
+        private void CountOfSiteVacancies()
         {
-            _searchEngine.WaitForPageLoad(2);
+            _vacancyPage.CountVacanciesOnPage();
 
-            var vacanciesList = driver.FindElements(By.XPath(_vacancyListXPath));
-
-            var vacNumber = vacanciesList.Count;
+            var vacNumber = _vacancyPage.NumberOfVacanсiesOnPage;
 
             Console.Clear();
 
