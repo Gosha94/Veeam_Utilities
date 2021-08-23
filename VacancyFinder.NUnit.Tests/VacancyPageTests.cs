@@ -89,7 +89,6 @@ namespace VacancyFinder.NUnit.Tests
             var expectedWindowSize = new Size(displayResolution.Width + browserHeader.Width, displayResolution.Height - browserHeader.Height);
 
             // Act
-            _vacancyPageUnderTests.GoToUrl();
             _vacancyPageUnderTests.ExpandBrowser();
             var actualWindowSize = _vacancyPageUnderTests.PageSize;
             var isScreenMaximized = IsScreensSizesEqual(expectedWindowSize, actualWindowSize);
