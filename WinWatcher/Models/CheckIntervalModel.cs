@@ -8,10 +8,8 @@
 
         #region Private Fields
         
-        private int _lifeTime;
-        private int _frequency;
-        private int _checksNumber;
-        private int _restTimeInMin;
+        private int _lifeTimeInSeconds;
+        private int _frequencyInSeconds;
 
         #endregion
 
@@ -22,10 +20,10 @@
         /// </summary>
         /// <param name="lifeTime"></param>
         /// <param name="frequency"></param>
-        public CheckIntervalModel(int lifeTime, int frequency)
+        public CheckIntervalModel(int lifeTimeInSeconds, int frequencyInSeconds)
         {
-            _lifeTime = lifeTime;
-            _frequency = frequency;            
+            _lifeTimeInSeconds = lifeTimeInSeconds;
+            _frequencyInSeconds = frequencyInSeconds;            
         }
 
         #endregion
@@ -36,10 +34,10 @@
             =>
                 new IntervalDto()
                 {
-                    CheckFrequencyInMsec = ConvertToMsec(_frequency),
-                    ProcessLifeTimeInMsec = ConvertToMsec(_lifeTime)
+                    ProcessLifeTimeInMsec = ConvertToMsec(_lifeTimeInSeconds),
+                    CheckFrequencyInMsec    = ConvertToMsec(_frequencyInSeconds)
                 };
-
+        
         #endregion
 
         #region Private Methods
@@ -48,7 +46,20 @@
         /// Метод конвертации минут в милисекунды
         /// </summary>        
         private int ConvertToMsec(int inputVal)
-            => inputVal * 60000;
+        {
+            var resultVal = 0;
+
+            if (inputVal < 0)
+            {
+                resultVal = inputVal * (-1) * 60000;
+            }
+            else
+            {
+                resultVal = inputVal * 60000;
+            }
+
+            return resultVal;
+        }
 
         #endregion
 
