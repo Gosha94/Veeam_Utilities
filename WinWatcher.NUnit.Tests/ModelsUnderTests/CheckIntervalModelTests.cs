@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using WinWatcher.Models;
 
-namespace WinWatcher.NUnit.Tests
+namespace WinWatcher.NUnit.Tests.ModelsUnderTests
 {
     [TestFixture]
     public class CheckIntervalModelTests

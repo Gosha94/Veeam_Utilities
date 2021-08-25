@@ -2,7 +2,7 @@
 using System;
 using VacancyFinder.Controllers;
 
-namespace VacancyFinder.NUnit.Tests
+namespace VacancyFinder.NUnit.Tests.ControllersUnderTests
 {
     [TestFixture]
     public class VacancyControllerTests

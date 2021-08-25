@@ -2,7 +2,7 @@
 using System;
 using VacancyFinder.Models;
 
-namespace VacancyFinder.NUnit.Tests
+namespace VacancyFinder.NUnit.Tests.ModelsUnderTests
 {
     [TestFixture]
     public class FindVacancyModelTests

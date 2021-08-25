@@ -3,12 +3,19 @@
     public enum TimerState
     {
         /// <summary>
+        /// В работе
+        /// </summary>
+        Working ,
+
+        /// <summary>
         /// Остановлен
         /// </summary>
         Stopped ,
+
         /// <summary>
-        /// В работе
+        /// Объект таймера собран Garbage Collector-ом
         /// </summary>
-        Working
+        Disposed
+        
     }
 }

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace WinWatcher.NUnit.Tests
+namespace WinWatcher.NUnit.Tests.ServicesUnderTests
 {
     [TestFixture]
     public class ProcessWatcherServiceTests

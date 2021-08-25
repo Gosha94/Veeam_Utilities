@@ -4,11 +4,13 @@ using WinWatcher.Models;
 using System.Diagnostics;
 using WinWatcher.Interfaces;
 using System.Collections.Generic;
+using WinWatcher.Enums;
 
 namespace WinWatcher.Services
 {
     public sealed class ProcessWatcherService : IDisposable
     {
+
         #region Private Fields
         
         private ILogger              _logger;
@@ -32,8 +34,17 @@ namespace WinWatcher.Services
 
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// Свойство, определяющее Dispose-статус объекта-таймера
+        /// </summary>
+        public TimerState ActualTimerState { get; private set; }
+
+        #endregion
+
         #region Public Methods
-        
+
         public void StartWatchProcess()
         {
             Console.ForegroundColor = ConsoleColor.Green;

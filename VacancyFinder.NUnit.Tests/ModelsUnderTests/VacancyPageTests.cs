@@ -6,7 +6,7 @@ using OpenQA.Selenium;
 using VacancyFinder.PageObjects;
 using System.Drawing;
 
-namespace VacancyFinder.NUnit.Tests
+namespace VacancyFinder.NUnit.Tests.ModelsUnderTests
 {
     [TestFixture]
     public class VacancyPageTests

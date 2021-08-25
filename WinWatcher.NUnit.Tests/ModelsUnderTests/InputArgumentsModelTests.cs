@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System;
 using WinWatcher.Models;
 
-namespace WinWatcher.NUnit.Tests
+namespace WinWatcher.NUnit.Tests.ModelsUnderTests
 {
     [TestFixture]
     public class InputArgumentsModelTests
