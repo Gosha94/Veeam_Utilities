@@ -10,8 +10,6 @@ namespace WinWatcher.Models
         public int ProcessLifeTimeInMsec { get; set; }
         public int CheckFrequencyInMsec  { get; set; }
 
-        public bool IsNull => throw new NotImplementedException();
-
         public override bool Equals(object secondDtoObj)
         {
             var _firstDto = this;
@@ -24,13 +22,17 @@ namespace WinWatcher.Models
             else
             {
                 var isTwoDtoEqual =
-                    (_firstDto.ProcessLifeTimeInMsec == _secondDto.CheckFrequencyInMsec)
+                    (_firstDto.ProcessLifeTimeInMsec == _secondDto.ProcessLifeTimeInMsec)
                     &&
                     (_firstDto.CheckFrequencyInMsec == _secondDto.CheckFrequencyInMsec);
                 
                 return isTwoDtoEqual;
             }
 
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
