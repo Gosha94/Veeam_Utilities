@@ -20,10 +20,7 @@ namespace WinWatcher.Models
         #endregion
 
         #region Public Model Properties
-
-        /// <summary>
-        /// Свойство определяет имя процесса Windows
-        /// </summary>
+                
         public string ProcessName
         {
             get => _processName;
@@ -35,10 +32,7 @@ namespace WinWatcher.Models
                 _processName = finalString;
             }
         }
-
-        /// <summary>
-        /// Свойство определяет время жизни процесса в минутах
-        /// </summary>
+       
         public int ProcessLifeTime
         {
             get => _processLifeTime;
@@ -54,10 +48,7 @@ namespace WinWatcher.Models
                 }                
             }
         }
-
-        /// <summary>
-        /// Свойство определяет частоту проверки процесса в минутах
-        /// </summary>
+        
         public int CheckFrequency
         {
             get => _checkFrequency;

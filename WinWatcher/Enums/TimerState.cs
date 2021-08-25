@@ -1,5 +1,8 @@
 ﻿namespace WinWatcher.Enums
 {
+    /// <summary>
+    /// Перечисление возможных состояний таймера
+    /// </summary>
     public enum TimerState
     {
         /// <summary>

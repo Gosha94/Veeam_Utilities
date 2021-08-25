@@ -1,13 +1,16 @@
 ﻿using System;
+using WinWatcher.Enums;
 using System.Threading;
 using WinWatcher.Models;
 using System.Diagnostics;
 using WinWatcher.Interfaces;
 using System.Collections.Generic;
-using WinWatcher.Enums;
 
 namespace WinWatcher.Services
 {
+    /// <summary>
+    /// Служба наблюдения за процессами в ОС Windows
+    /// </summary>
     public sealed class ProcessWatcherService : IDisposable
     {
 
@@ -39,7 +42,7 @@ namespace WinWatcher.Services
         /// <summary>
         /// Свойство, определяющее Dispose-статус объекта-таймера
         /// </summary>
-        public TimerState ActualTimerState { get; private set; }
+        public TimerState ActualTimerState { get; private set; } = TimerState.Stopped;
 
         #endregion
 
@@ -59,17 +62,23 @@ namespace WinWatcher.Services
 
             _timer = new Timer(CheckProcess, null, TimeSpan.Zero,
                 TimeSpan.FromMilliseconds(doubleInterval));
+            
+            this.ActualTimerState = TimerState.Working;
         }
 
         public void StopWatchProcess()
         {
             _logger.WriteToLog("Служба мониторинга остановлена!");
             _timer?.Change(Timeout.Infinite, 0);
+
+            this.ActualTimerState = TimerState.Stopped;
         }
 
         public void Dispose()
         {
             _timer?.Dispose();
+            
+            this.ActualTimerState = TimerState.Disposed;
         }
 
         #endregion
